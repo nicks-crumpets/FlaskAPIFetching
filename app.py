@@ -14,13 +14,36 @@ def home():
 def get_data():
     try:
         # Attempts to get the data from the API link
-        response = requests.get('https://emojihub.yurace.pro/api/random')
+        # https://www.themoviedb.org/u/nickscrumpets
+        # 22548726
+
+        url = "https://api.themoviedb.org/3/account/YOUR_ACCOUNT_ID_HERE"
+
+        headers = {
+            "accept": "application/json",
+            "Authorization": "Bearer PUT_YOUR_API_KEY_HERE"
+        }
+
+        response = requests.get(url, headers=headers)
         response.raise_for_status()
-        # saves json response into variable
         data = response.json()
-        category = data['category']
-        unicode_list = data['unicode']
-        emoji = chr(int(unicode_list[0].lstrip('U+'), 16))
+        username = data['username']
+        name = data['name']
+        img = data['avatar']['tmdb']['avatar_path']
+        #tmdb = data['tmdb']
+        profile_url = "https://media.themoviedb.org/t/p/w300_and_h300_face"
+
+        theimage = profile_url + img
+
+        print(theimage)
+
+
+
+        #response = requests.get('https://api.themoviedb.org/3/movie/latest?api_key=a2aca971ecc30ef8a0cc14d8e1895ab8')
+
+        # saves json response into variable
+        #data = response.json()
+        #title = data['title']
 
 
 
@@ -33,7 +56,7 @@ def get_data():
         return jsonify({'ERR':f'Other error occurred: {err}'}), 500
 
     # Returns data to the webpage
-    return render_template('data.html', data=data, category=category, emoji=emoji, mimetype='text/html')
+    return render_template('data.html',name=name,img=img,theimage=theimage, username=username, data=data, mimetype='text/html')
 
 # Runs the app
 if __name__ == '__main__':
